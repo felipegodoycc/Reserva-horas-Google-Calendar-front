@@ -1,0 +1,109 @@
+<div class="container">
+  <h1>Reservacion horas</h1>
+  <mat-vertical-stepper #stepper linear="true">
+    <mat-step [stepControl]="reserveDataForm" editable="true">
+      <ng-template matStepLabel>Seleccione fecha</ng-template>
+      <mat-grid-list cols="3" rowHeight="600px">
+        <mat-grid-tile colspan="2">
+          <app-calendar [events]="dayEvents" (selectedDay)="onSelectedDay($event)" (today)="getToday($event)"></app-calendar>
+          <mat-error *ngIf="reserveDataControls['date'].hasError('required') && false">
+            Campo <strong>requerido</strong>
+          </mat-error>
+        </mat-grid-tile>
+        <mat-grid-tile colspan="1">
+          <mat-progress-spinner mode="indeterminate" *ngIf="showSpinner"></mat-progress-spinner>
+          <div class="info-text" *ngIf="!showSpinner &&timeSlotSelectedDay.length == 0">
+            <mat-icon class="icon-info-text" >info</mat-icon>
+            <h5 class="message-text">{{ message }}</h5>
+          </div>
+          <mat-card *ngIf="!showSpinner && timeSlotSelectedDay.length > 0">
+            <mat-card-title style="font-size: 1.5em;">Horas disponibles para el dia {{ selectedDate }}</mat-card-title>
+            <mat-card-content>
+              <mat-list role="list" >
+                <mat-list-item role="listitem" *ngFor="let tl of timeSlotSelectedDay" [ngClass]="tl.available ? 'available-slot' : 'unavailable-slot'">
+                  <p>{{ tl.startTime.substring(1,6) }} - {{ tl.endTime.substring(1,6) }} | {{ tl.available ? "Disponible" : "No disponible"}} </p>
+                  <button mat-raised-button color="primary" *ngIf="tl.available" (click)="preReserva(tl)">
+                    <mat-icon>library_add</mat-icon>
+                  </button>
+                  <mat-divider></mat-divider>
+                </mat-list-item>
+              </mat-list>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-error *ngIf="reserveDataControls['timeslot'].hasError('required') && false">
+            Campo <strong>requerido</strong>
+          </mat-error>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </mat-step>
+    <mat-step [stepControl]="datosPersonaForm" editable="false">
+      <ng-template matStepLabel>Datos personales</ng-template>
+      <mat-card>
+        <mat-card-title>Estas reservando el siguiente bloque</mat-card-title>
+        <mat-card-content>
+          <p> Fecha: {{ selectedDate }}</p>
+          <p> Inicio: {{ selectedTimeSlot.startTime.substring(1,6) }}</p>
+          <p> Final: {{ selectedTimeSlot.endTime.substring(1,6) }}</p>
+        </mat-card-content>
+      </mat-card>
+      <mat-card>
+        <mat-card-title>Ingresa tus datos de reservacion</mat-card-title>
+        <mat-card-content>
+          <form [formGroup]="datosPersonaForm" class="formPersonalData">
+            <mat-form-field appearance="standard">
+              <mat-label>Nombre</mat-label>
+              <input matInput formControlName="name" placeholder="" required>
+              <mat-error *ngIf="formControls['name'].hasError('required')">
+                Campo <strong>requerido</strong>
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="standard">
+              <mat-label>Apellido</mat-label>
+              <input matInput formControlName="lastName" placeholder="" required>
+              <mat-error *ngIf="formControls['lastName'].hasError('required')">
+                Campo <strong>requerido</strong>
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="standard">
+              <mat-label>Telefono contacto</mat-label>
+              <input matInput formControlName="phone" placeholder="" required>
+              <mat-error *ngIf="formControls['lastName'].hasError('required')">
+                Campo <strong>requerido</strong>
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="standard">
+              <mat-label>Email</mat-label>
+              <input matInput formControlName="email" placeholder="" required>
+              <mat-error *ngIf="formControls['email'].hasError('required')">
+                Campo <strong>requerido</strong>
+              </mat-error>
+            </mat-form-field>
+            <div class="buttons-stepper">
+              <button mat-raised-button matStepperPrevious>Volver</button>
+              <button mat-raised-button (click)="confirmacion()" color="primary">Siguiente</button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </mat-step>
+    <mat-step editable="false">
+      <ng-template matStepLabel>Confirmacion</ng-template>
+      <mat-card *ngIf="personalData">
+        <mat-card-title>Estos son los datos de reservacion:</mat-card-title>
+        <mat-card-content>
+          <p> <strong>Fecha reservacion:</strong> {{ selectedDate }}</p>
+          <p> <strong>Inicio: </strong> {{ selectedTimeSlot.startTime.substring(1,6) }}</p>
+          <p> <strong>Final: </strong> {{ selectedTimeSlot.endTime.substring(1,6) }}</p>
+          <p> <strong>Nombre: </strong> {{ personalData.name }} {{ personalData.lastName }}</p>
+          <p> <strong>Correo: </strong>{{ personalData.email }}</p>
+          <p> <strong>Telefono: </strong>{{ personalData.phone }}</p>
+        </mat-card-content>
+        <div class="buttons-stepper">
+          <button mat-raised-button matStepperPrevious>Volver</button>
+          <button mat-raised-button color="primary" (click)="reservar()">Reservar</button>
+        </div>
+      </mat-card>
+    </mat-step>
+  </mat-vertical-stepper>
+</div>
