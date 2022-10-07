@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  bff_url: 'http://localhost:8080'
 };
