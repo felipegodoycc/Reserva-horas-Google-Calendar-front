@@ -26,3 +26,20 @@ export interface CalendarTimeslotsApiResponse{
   success: boolean,
   timeslots: CalendarTimeSlot[]
 }
+
+export interface EventData {
+  date: string,
+  time: string
+}
+
+export interface PersonalData {
+  name: string,
+  lastName: string,
+  phone: string,
+  email: string
+}
+
+export interface RequestBooking {
+  eventData: EventData,
+  personalData: PersonalData
+}

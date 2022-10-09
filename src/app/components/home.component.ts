@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatStepper } from '@angular/material/stepper';
 import { CalendarService } from 'src/app/services/calendar.service';
-import { CalendarDay, CalendarQueryData, CalendarTimeSlot } from '../interfaces/calendarApi.interface';
+import { CalendarDay, CalendarQueryData, CalendarTimeSlot, EventData } from '../interfaces/calendarApi.interface';
 import { CalendarEvent } from '../interfaces/event.interface';
 import { getObjectDate, getObjectTime } from '../utils/date-utils';
 
@@ -111,12 +111,13 @@ export class HomeComponent implements OnInit {
   }
 
   public reservar(){
-    const dateData: CalendarQueryData = getObjectDate(this.selectedDate);
-    const timeData = getObjectTime(this.selectedTimeSlot.startTime);
-    const data = Object.assign(dateData, timeData);
-    this.calendarService.reserveSlot(data).subscribe( res => {
+    const eventData: EventData = {
+      date: this.selectedDate,
+      time: this.selectedTimeSlot.startTime
+    }
+    this.calendarService.reserveSlot(eventData, this.personalData).subscribe( res => {
       console.log("Respuesta reservar: ", res)
-      this.myStepper.reset();
+      // this.myStepper.reset();
     })
   }
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { CalendarDaysApiResponse, CalendarQueryData, CalendarTimeslotsApiResponse } from '../interfaces/calendarApi.interface';
+import { CalendarDaysApiResponse, CalendarQueryData, CalendarTimeslotsApiResponse, EventData, PersonalData, RequestBooking } from '../interfaces/calendarApi.interface';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -24,9 +24,12 @@ export class CalendarService {
     return this.httpClient.get<CalendarTimeslotsApiResponse>(uri);
   }
 
-  reserveSlot(data: CalendarQueryData){
-    const uri = `${this.urlServer}/book?year=${data.year}&month=${data.month}&day=${data.day}&hour=${data.hour}&minute=${data.minutes}`;
-    const body = {};
+  reserveSlot(eventData: EventData, personalData: PersonalData){
+    const uri = `${this.urlServer}/book`;
+    const body: RequestBooking = {
+      personalData,
+      eventData
+    };
     return this.httpClient.post(uri, body);
   }
 }
