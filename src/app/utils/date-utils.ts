@@ -1,17 +1,10 @@
 export const getObjectDate = (date: string) => {
-  const parts = date.split('/');
-  return {
-    day: parts[0],
-    month: parts[1],
-    year: parts[2]
-  }
+  const [ year, month, day] = date.split('-');
+  return { day, month, year }
 }
 
 export const getObjectTime = (time: string) => {
   time = time.substring(1, time.length - 1);
-  const parts = time.split(":");
-  return {
-    hour: parts[0],
-    minutes: parts[1]
-  }
+  const [hour, minutes] = time.split(":");
+  return { hour, minutes }
 }
