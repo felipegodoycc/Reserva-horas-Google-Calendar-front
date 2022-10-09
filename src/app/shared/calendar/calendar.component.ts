@@ -28,9 +28,13 @@ export class CalendarComponent implements OnInit {
     validRange: {
       start: new Date()
     },
-    showNonCurrentDates: false,
+    // showNonCurrentDates: false,
     firstDay: 1,
-    datesSet: this.detectDateSet
+    datesSet: this.detectDateSet,
+    locale: 'cl',
+    titleFormat: { year: 'numeric', month: 'long' },
+    buttonText: { today: 'Hoy' },
+    hiddenDays: [0,6]
   };
 
   constructor() { }
@@ -49,8 +53,7 @@ export class CalendarComponent implements OnInit {
   }
 
   handleDateClick(args:any){
-    const dateSelected = formatDate(args.date, { month: 'numeric', year: 'numeric', day: 'numeric', locale: 'cl' });
-    this.selectedDay.emit(dateSelected);
+    this.selectedDay.emit(args.dateStr);
   }
 
 }
