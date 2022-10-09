@@ -19,15 +19,13 @@
           <mat-card *ngIf="!showSpinner && timeSlotSelectedDay.length > 0">
             <mat-card-title style="font-size: 1.5em;">Horas disponibles para el dia {{ selectedDate }}</mat-card-title>
             <mat-card-content>
-              <mat-list role="list" >
-                <mat-list-item role="listitem" *ngFor="let tl of timeSlotSelectedDay" [ngClass]="tl.available ? 'available-slot' : 'unavailable-slot'">
-                  <p>{{ tl.startTime.substring(1,6) }} - {{ tl.endTime.substring(1,6) }} | {{ tl.available ? "Disponible" : "No disponible"}} </p>
-                  <button mat-raised-button color="primary" *ngIf="tl.available" (click)="preReserva(tl)">
-                    <mat-icon>library_add</mat-icon>
-                  </button>
+              <mat-action-list role="list" >
+                <mat-list-item role="listitem" [disabled]="!tl.available" *ngFor="let tl of timeSlotSelectedDay" (click)="preReserva(tl)">
+                  <mat-icon [ngClass]="tl.available ? 'available-slot' : 'unavailable-slot'">{{ tl.available ? 'check_circle' : 'cancel'}}</mat-icon>
+                  <p>{{ tl.startTime.substring(1,6) }} - {{ tl.endTime.substring(1,6) }}</p>
                   <mat-divider></mat-divider>
                 </mat-list-item>
-              </mat-list>
+              </mat-action-list>
             </mat-card-content>
           </mat-card>
 
